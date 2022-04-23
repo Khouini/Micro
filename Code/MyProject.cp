@@ -15,11 +15,15 @@ sbit LCD_D5_Direction at TRISD1_bit;
 sbit LCD_D6_Direction at TRISD2_bit;
 sbit LCD_D7_Direction at TRISD3_bit;
 
-int i;
-char txt1[] = "YACINE";
-char txt2[] = "KHOUINI";
+char j;
+char array[] = "";
+char MD[] = "Ebixa 10mg 2/J  Aricept 10mg 3/J";
+char i;
+char txt1[] = "Worked          ";
+char txt2[] = "Temperature       ";
+char txt3[] = "successfully    ";
 int t;
-char lcd[] = "000 Degree" ;
+char lcd[] = "000 Degree      " ;
 char temperature;
 void clignoter(){
  for(i=0;i<2;i++){
@@ -62,9 +66,8 @@ void interrupt(){
 void main(){
  ADCON1=0x04;
  Lcd_Init();
+ Lcd_Cmd(_LCD_CLEAR);
  Lcd_Cmd(_LCD_CURSOR_OFF);
-
-
 
  intcon.GIE=1;
  intcon.inte=1;
@@ -72,21 +75,25 @@ void main(){
  option_reg.intedg=1;
 
  trisb=0b00111001;
+ trisc=0b00000000;
 
  portb.rb1=0;
  portb.rb2=0;
  portb.rb6=0;
  portb.rb7=0;
-
-
- do{
-
-
-
  Lcd_Cmd(_LCD_CLEAR);
- Lcd_out(1,1, "Temperature");
+ delay_ms(100);
+ Lcd_Out(1,1,txt1);
+ delay_ms(100);
+ Lcd_Out(2,1,txt3);
+ delay_ms(1000);
 
+ for(j = 0; j < 32; j++){
+ EEPROM_Write(0x10+j, MD[j]);
+ delay_ms(20);
+ }
 
+ while(1){
  t = ADC_Read(0);
  t=t*0.4887;
  temperature = t%10;
@@ -99,10 +106,24 @@ void main(){
  t=t/10;
  temperature=t%10;
  lcd[0] = temperature + '0';
-
+ delay_ms(100);
+ Lcd_Cmd(_LCD_CLEAR);
+ Lcd_out(1,1, txt2);
+ delay_ms(20);
  Lcd_Out(2,1,lcd);
- Delay_ms(200);
+ Delay_ms(1000);
+ for(j = 0; j < 16; j++){
+ array[j] = EEPROM_Read(0x10+j);
+ delay_ms(20);
+ }
+ Lcd_Cmd(_LCD_CLEAR);
+ Lcd_Out(1,1,array);
+ for(j = 0; j < 16; j++){
+ array[j] = EEPROM_Read(0x20+j);
+ delay_ms(20);
+ }
+ Lcd_Out(2,1,array);
+ delay_ms(1000);
 
- }while (1);
-
+ }
 }

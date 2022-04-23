@@ -18,6 +18,7 @@ main
 				Delay_1us
 				Delay_5500us
 				Delay_50us
+	EEPROM_Write
 	ADC_Read
 		Delay_22us
 	int2double
@@ -33,5 +34,6 @@ main
 		SETIOV3224
 	Div_16x16_S
 		Div_16x16_S_L
+	EEPROM_Read
 interrupt
 	clignoter
