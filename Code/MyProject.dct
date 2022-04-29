@@ -308,6 +308,7 @@ mul_32x32_s
 mul_32x32_u
 mul_8x8_s
 mul_8x8_u
+nb
 not_a
 not_a_bit
 not_address

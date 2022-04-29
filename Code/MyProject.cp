@@ -19,6 +19,7 @@ char j;
 char array[] = "";
 char MD[] = "Ebixa 10mg 2/J  Aricept 10mg 3/J";
 char i;
+int NB;
 char txt1[] = "Worked          ";
 char txt2[] = "Temperature       ";
 char txt3[] = "successfully    ";
@@ -40,8 +41,9 @@ void interrupt(){
  if(intcon.INTF) {
  porta.ra1=0;
  clignoter();
- }
- intcon.INTF=0;
+
+ } intcon.INTF=0;
+
  if(intcon.rbif) {
  if (portb.rb5==1){
  portb.rb6=1;
@@ -61,7 +63,22 @@ void interrupt(){
  portb.rb7=0;
  delay_ms(100);
  }
+
+ }intcon.rbif=0;
+ if (intcon.T0IF){
+ NB--;
+ if (NB==0){
+
+ portc.rc0=~portc.rc0;
+#line 75 "D:/Documents/GitHub/Micro/Code/MyProject.c"
+ NB=30;
+ TMR0=0;
  }
+
+ intcon.T0IF=0;
+ }
+
+
 }
 void main(){
  ADCON1=0x04;
@@ -72,15 +89,21 @@ void main(){
  intcon.GIE=1;
  intcon.inte=1;
  intcon.rbie=1;
+ intcon.T0IE=1;
+ TMR0=0;
+ option_reg = 0b00000111;
+ NB=30;
  option_reg.intedg=1;
 
  trisb=0b00111001;
  trisc=0b00000000;
+ trisc = 0;
 
  portb.rb1=0;
  portb.rb2=0;
  portb.rb6=0;
  portb.rb7=0;
+ portc = 0;
  Lcd_Cmd(_LCD_CLEAR);
  delay_ms(100);
  Lcd_Out(1,1,txt1);
