@@ -19,6 +19,7 @@ char resume = 0;
 char flagT = 0;
 char j;
 char array[] = "";
+char array2[] = "";
 char MD[] = "Ebixa 10mg 2/J  Aricept 10mg 3/J";
 char i;
 int NB;
@@ -40,23 +41,13 @@ void clignoter() {
 }
 void afficherMD() {
  portc.rc0 = 1;
- for (j = 0; j < 16; j++) {
- array[j] = EEPROM_Read(0x10 + j);
- delay_ms(20);
- }
- Lcd_Cmd(_LCD_CLEAR);
  Lcd_Out(1, 1, array);
- for (j = 0; j < 16; j++) {
- array[j] = EEPROM_Read(0x20 + j);
- delay_ms(20);
- }
- Lcd_Out(2, 1, array);
+ Lcd_Out(2, 1, array2);
 }
 void interrupt() {
  if (intcon.INTF) {
  porta.ra1 = 0;
  clignoter();
-
  }
  intcon.INTF = 0;
 
@@ -86,13 +77,12 @@ void interrupt() {
  NB--;
  if (NB == 0) {
  flagT = 1;
- NB = 30;
+ NB = 31;
  TMR0 = 0;
  }
  }
  intcon.T0IF = 0;
 }
-
 void main() {
  Degree[0] = 223;
  ADCON1 = 0x04;
@@ -106,7 +96,7 @@ void main() {
  intcon.T0IE = 1;
  TMR0 = 0;
  option_reg = 0b00000111;
- NB = 30;
+ NB = 31;
  option_reg.intedg = 1;
 
  trisb = 0b00111001;
@@ -128,12 +118,20 @@ void main() {
  EEPROM_Write(0x10 + j, MD[j]);
  delay_ms(20);
  }
-
+ for (j = 0; j < 16; j++) {
+ array[j] = EEPROM_Read(0x10 + j);
+ delay_ms(20);
+ }
+ for (j = 0; j < 16; j++) {
+ array2[j] = EEPROM_Read(0x20 + j);
+ delay_ms(20);
+ }
  while (1) {
  if (flagT == 1) {
+ Lcd_Cmd(_LCD_CLEAR);
  afficherMD();
+ delay_ms(600);
  Temp = ADC_Read(0) * 0.489;
- delay_ms(300);
  portc.rc0 = 0;
  Lcd_Cmd(_LCD_CLEAR);
  flagT = 0;
@@ -150,7 +148,7 @@ void main() {
  lcd_out(1, 3, "Temperature:");
  delay_ms(20);
  lcd_out(2, 5, Temperature);
- Delay_ms(20);
+ Delay_ms(600);
  if (Temp < 1) {
  for (i = 0; i < 3; i++) {
  portc.rc3 = 1;
@@ -162,7 +160,7 @@ void main() {
  if (resume == 1) {
  if (Temp > 39) {
  portc.rc1 = 1;
- delay_ms(400);
+ delay_ms(500);
  portc.rc1 = 0;
  resume = 0;
  } else if ((Temp <= 39) && (Temp > 1)) {
