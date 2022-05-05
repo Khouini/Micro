@@ -15,17 +15,19 @@ sbit LCD_D5_Direction at TRISD1_bit;
 sbit LCD_D6_Direction at TRISD2_bit;
 sbit LCD_D7_Direction at TRISD3_bit;
 
+char resume = 0;
+char flagT=0;
 char j;
 char array[] = "";
 char MD[] = "Ebixa 10mg 2/J  Aricept 10mg 3/J";
 char i;
 int NB;
 char txt1[] = "Worked          ";
-char txt2[] = "Temperature       ";
+char Temperature[] = " 00.0 C";
+char degree[]= " " ;
+unsigned int Temp;
 char txt3[] = "successfully    ";
 int t;
-char lcd[] = "000 Degree      " ;
-char temperature;
 void clignoter(){
  for(i=0;i<2;i++){
  portb.rb1=1 ;
@@ -35,14 +37,27 @@ void clignoter(){
  delay_ms(500);
  }
  portb.rb2=0 ;
-
+}
+void afficherMD(){
+ portc.rc0=1;
+ for(j = 0; j < 16; j++){
+ array[j] = EEPROM_Read(0x10+j);
+ delay_ms(20);
+ }
+ Lcd_Cmd(_LCD_CLEAR);
+ Lcd_Out(1,1,array);
+ for(j = 0; j < 16; j++){
+ array[j] = EEPROM_Read(0x20+j);
+ delay_ms(20);
+ }
+ Lcd_Out(2,1,array);
 }
 void interrupt(){
  if(intcon.INTF) {
  porta.ra1=0;
  clignoter();
 
- } intcon.INTF=0;
+ }intcon.INTF=0;
 
  if(intcon.rbif) {
  if (portb.rb5==1){
@@ -68,19 +83,15 @@ void interrupt(){
  if (intcon.T0IF){
  NB--;
  if (NB==0){
-
- portc.rc0=~portc.rc0;
-#line 75 "D:/Documents/GitHub/Micro/Code/MyProject.c"
+ flagT=1;
  NB=30;
  TMR0=0;
  }
-
- intcon.T0IF=0;
- }
-
-
+ }intcon.T0IF=0;
 }
+
 void main(){
+Degree[0] = 223;
  ADCON1=0x04;
  Lcd_Init();
  Lcd_Cmd(_LCD_CLEAR);
@@ -109,44 +120,57 @@ void main(){
  Lcd_Out(1,1,txt1);
  delay_ms(100);
  Lcd_Out(2,1,txt3);
- delay_ms(1000);
-
+ delay_ms(300);
  for(j = 0; j < 32; j++){
  EEPROM_Write(0x10+j, MD[j]);
  delay_ms(20);
  }
 
  while(1){
- t = ADC_Read(0);
- t=t*0.4887;
- temperature = t%10;
- lcd[2] = temperature + '0';
+ if (flagT == 1){
 
- t=t/10;
- temperature=t%10;
- lcd[1] = temperature + '0';
+ afficherMD();
+ Temp = ADC_Read(0) * 0.489;
+ delay_ms(300);
+ portc.rc0=0;
+ Lcd_Cmd(_LCD_CLEAR);
+ flagT=0;
+ resume=1;
+ }
+if (temp > 99)
+ Temperature[0] = 1 + 48;
+ else
+ Temperature[0] = ' ';
+ Temperature[1] = (temp / 10) % 10 + 48;
+ Temperature[2] = temp % 10 + 48;
+ Temperature[5] = 223;
+ Lcd_Cmd(_LCD_CLEAR);
+ lcd_out(1, 3, "Temperature:");
+ delay_ms(20);
+ lcd_out(2, 5, Temperature);
+ Delay_ms(20);
+ if(Temp < 1){
+ for(i=0;i<3;i++){
+ portc.rc3 = 1;
+ delay_ms(250);
+ portc.rc3 = 0;
+ delay_ms(250);
+ }
+ }
+ if (resume == 1 ){
+ if(Temp > 39){
+ portc.rc1 = 1;
+ delay_ms(400);
+ portc.rc1 = 0;
+ resume = 0;
+ }else if((Temp <= 39)&&(Temp > 1)){
+ portc.rc2 = 1;
+ delay_ms(400);
+ portc.rc2 = 0;
+ resume = 0;
+ }
+ }
 
- t=t/10;
- temperature=t%10;
- lcd[0] = temperature + '0';
- delay_ms(100);
- Lcd_Cmd(_LCD_CLEAR);
- Lcd_out(1,1, txt2);
- delay_ms(20);
- Lcd_Out(2,1,lcd);
- Delay_ms(1000);
- for(j = 0; j < 16; j++){
- array[j] = EEPROM_Read(0x10+j);
- delay_ms(20);
- }
- Lcd_Cmd(_LCD_CLEAR);
- Lcd_Out(1,1,array);
- for(j = 0; j < 16; j++){
- array[j] = EEPROM_Read(0x20+j);
- delay_ms(20);
- }
- Lcd_Out(2,1,array);
- delay_ms(1000);
 
  }
 }

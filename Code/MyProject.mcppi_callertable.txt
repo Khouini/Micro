@@ -19,9 +19,25 @@ main
 				Delay_5500us
 				Delay_50us
 	EEPROM_Write
+	afficherMD
+		EEPROM_Read
+		Lcd_Cmd
+			Delay_1us
+			Delay_5500us
+			Delay_50us
+		Lcd_Out
+			Lcd_Cmd
+				Delay_1us
+				Delay_5500us
+				Delay_50us
+			Lcd_Chr_CP
+				Lcd_Cmd
+					Delay_1us
+					Delay_5500us
+					Delay_50us
 	ADC_Read
 		Delay_22us
-	int2double
+	word2double
 		NRM3232
 			RES032
 			SETFUN32
@@ -30,10 +46,8 @@ main
 		RES032
 		SETFOV32
 		SETFUN32
-	double2int
+	double2word
 		SETIOV3224
-	Div_16x16_S
-		Div_16x16_S_L
-	EEPROM_Read
+	Div_16X16_U
 interrupt
 	clignoter

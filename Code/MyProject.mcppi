@@ -25,7 +25,8 @@ Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
 File0=MyProject.c
-Count=1
+File1=.\C:\Program Files\mikroC PRO for PIC\Uses\P16\__Lib_Delays.c
+Count=2
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
@@ -49,7 +50,10 @@ File3=ADC
 File4=EEPROM
 File5=Lcd_Constants
 File6=SPI_Lcd
-Count=7
+File7=SPI_Ethernet
+File8=C_String
+File9=SPI_Ethernet_24j600
+Count=10
 [EXPANDED_NODES]
 0=MyProject.mcppi
 Count=1
@@ -89,10 +93,11 @@ Count=1
 427=SPI_Lcd
 434=SPI_Lcd8
 441=SPI_T6963C
+472=Sprinti
 475=Sprintl
 478=T6963C
 506=Time
 509=TouchPanel
 518=Trigonometry
 521=UART
-Count=41
+Count=42
