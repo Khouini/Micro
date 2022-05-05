@@ -25,8 +25,7 @@ Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
 File0=MyProject.c
-File1=.\C:\Program Files\mikroC PRO for PIC\Uses\P16\__Lib_Delays.c
-Count=2
+Count=1
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
@@ -100,4 +99,4 @@ Count=1
 509=TouchPanel
 518=Trigonometry
 521=UART
-Count=42
+Count=43
