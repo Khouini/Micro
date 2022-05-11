@@ -1,19 +1,19 @@
 
 _clignoter:
 
-;MyProject.c,31 :: 		void clignoter() { //2fois
-;MyProject.c,32 :: 		for (i = 0; i < 2; i++) {
+;MyProject.c,32 :: 		void clignoter() { //2fois
+;MyProject.c,33 :: 		for (i = 0; i < 2; i++) {
 	CLRF       _i+0
 L_clignoter0:
 	MOVLW      2
 	SUBWF      _i+0, 0
 	BTFSC      STATUS+0, 0
 	GOTO       L_clignoter1
-;MyProject.c,33 :: 		portb.rb1 = 1;
+;MyProject.c,34 :: 		portb.rb1 = 1;
 	BSF        PORTB+0, 1
-;MyProject.c,34 :: 		portb.rb2 = 1;
+;MyProject.c,35 :: 		portb.rb2 = 1;
 	BSF        PORTB+0, 2
-;MyProject.c,35 :: 		delay_ms(500);
+;MyProject.c,36 :: 		delay_ms(500);
 	MOVLW      3
 	MOVWF      R11+0
 	MOVLW      138
@@ -29,9 +29,9 @@ L_clignoter3:
 	GOTO       L_clignoter3
 	NOP
 	NOP
-;MyProject.c,36 :: 		portb.rb1 = 0;
+;MyProject.c,37 :: 		portb.rb1 = 0;
 	BCF        PORTB+0, 1
-;MyProject.c,37 :: 		delay_ms(500);
+;MyProject.c,38 :: 		delay_ms(500);
 	MOVLW      3
 	MOVWF      R11+0
 	MOVLW      138
@@ -47,24 +47,24 @@ L_clignoter4:
 	GOTO       L_clignoter4
 	NOP
 	NOP
-;MyProject.c,32 :: 		for (i = 0; i < 2; i++) {
+;MyProject.c,33 :: 		for (i = 0; i < 2; i++) {
 	INCF       _i+0, 1
-;MyProject.c,38 :: 		}
+;MyProject.c,39 :: 		}
 	GOTO       L_clignoter0
 L_clignoter1:
-;MyProject.c,39 :: 		portb.rb2 = 0;
+;MyProject.c,40 :: 		portb.rb2 = 0;
 	BCF        PORTB+0, 2
-;MyProject.c,40 :: 		}
+;MyProject.c,41 :: 		}
 L_end_clignoter:
 	RETURN
 ; end of _clignoter
 
 _afficherMD:
 
-;MyProject.c,41 :: 		void afficherMD() {
-;MyProject.c,42 :: 		portc.rc0 = 1; // allumer speaker
+;MyProject.c,42 :: 		void afficherMD() {
+;MyProject.c,43 :: 		portc.rc0 = 1; // allumer speaker
 	BSF        PORTC+0, 0
-;MyProject.c,43 :: 		Lcd_Out(1, 1, array);
+;MyProject.c,44 :: 		Lcd_Out(1, 1, array);
 	MOVLW      1
 	MOVWF      FARG_Lcd_Out_row+0
 	MOVLW      1
@@ -72,7 +72,7 @@ _afficherMD:
 	MOVLW      _array+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;MyProject.c,44 :: 		Lcd_Out(2, 1, array2);
+;MyProject.c,45 :: 		Lcd_Out(2, 1, array2);
 	MOVLW      2
 	MOVWF      FARG_Lcd_Out_row+0
 	MOVLW      1
@@ -80,7 +80,7 @@ _afficherMD:
 	MOVLW      _array2+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;MyProject.c,45 :: 		}
+;MyProject.c,46 :: 		}
 L_end_afficherMD:
 	RETURN
 ; end of _afficherMD
@@ -94,18 +94,18 @@ _interrupt:
 	MOVWF      ___savePCLATH+0
 	CLRF       PCLATH+0
 
-;MyProject.c,46 :: 		void interrupt() {
-;MyProject.c,47 :: 		if (intcon.INTF) {
+;MyProject.c,47 :: 		void interrupt() {
+;MyProject.c,48 :: 		if (intcon.INTF) {
 	BTFSS      INTCON+0, 1
 	GOTO       L_interrupt5
-;MyProject.c,48 :: 		porta.ra1 = 0;
+;MyProject.c,49 :: 		porta.ra1 = 0;
 	BCF        PORTA+0, 1
-;MyProject.c,49 :: 		clignoter();
+;MyProject.c,50 :: 		clignoter();
 	CALL       _clignoter+0
-;MyProject.c,50 :: 		}
-L_interrupt5:
 ;MyProject.c,51 :: 		intcon.INTF = 0; //flag=0
 	BCF        INTCON+0, 1
+;MyProject.c,52 :: 		}
+L_interrupt5:
 ;MyProject.c,53 :: 		if (intcon.rbif) {
 	BTFSS      INTCON+0, 0
 	GOTO       L_interrupt6
@@ -197,10 +197,10 @@ L_interrupt14:
 	NOP
 ;MyProject.c,71 :: 		}
 L_interrupt13:
+;MyProject.c,72 :: 		intcon.rbif = 0; //flag=0
+	BCF        INTCON+0, 0
 ;MyProject.c,73 :: 		}
 L_interrupt6:
-;MyProject.c,74 :: 		intcon.rbif = 0; //flag=0
-	BCF        INTCON+0, 0
 ;MyProject.c,75 :: 		if (intcon.T0IF) {
 	BTFSS      INTCON+0, 2
 	GOTO       L_interrupt15
@@ -209,7 +209,7 @@ L_interrupt6:
 	SUBWF      _NB+0, 1
 	BTFSS      STATUS+0, 0
 	DECF       _NB+1, 1
-;MyProject.c,77 :: 		if (NB == 0) { // le temps (8s) est passé
+;MyProject.c,77 :: 		if (NB == 0) { // le temps (8s) est pass?
 	MOVLW      0
 	XORWF      _NB+1, 0
 	BTFSS      STATUS+0, 2
@@ -235,7 +235,7 @@ L_interrupt16:
 L_interrupt15:
 ;MyProject.c,83 :: 		intcon.T0IF = 0; // flag = 0
 	BCF        INTCON+0, 2
-;MyProject.c,84 :: 		}
+;MyProject.c,85 :: 		}
 L_end_interrupt:
 L__interrupt58:
 	MOVF       ___savePCLATH+0, 0
@@ -249,65 +249,65 @@ L__interrupt58:
 
 _main:
 
-;MyProject.c,85 :: 		void main() {
-;MyProject.c,86 :: 		Degree[0] = 223;
+;MyProject.c,86 :: 		void main() {
+;MyProject.c,87 :: 		Degree[0] = 223;
 	MOVLW      223
 	MOVWF      _degree+0
-;MyProject.c,87 :: 		ADCON1 = 0x04;
+;MyProject.c,88 :: 		ADCON1 = 0x04;
 	MOVLW      4
 	MOVWF      ADCON1+0
-;MyProject.c,88 :: 		Lcd_Init(); // Initialize LCD
+;MyProject.c,89 :: 		Lcd_Init(); // Initialize LCD
 	CALL       _Lcd_Init+0
-;MyProject.c,89 :: 		Lcd_Cmd(_LCD_CLEAR); // Clear display
+;MyProject.c,90 :: 		Lcd_Cmd(_LCD_CLEAR); // Clear display
 	MOVLW      1
 	MOVWF      FARG_Lcd_Cmd_out_char+0
 	CALL       _Lcd_Cmd+0
-;MyProject.c,90 :: 		Lcd_Cmd(_LCD_CURSOR_OFF); // Cursor off
+;MyProject.c,91 :: 		Lcd_Cmd(_LCD_CURSOR_OFF); // Cursor off
 	MOVLW      12
 	MOVWF      FARG_Lcd_Cmd_out_char+0
 	CALL       _Lcd_Cmd+0
-;MyProject.c,92 :: 		intcon.GIE = 1; //global inetrrupt
+;MyProject.c,93 :: 		intcon.GIE = 1; //global inetrrupt
 	BSF        INTCON+0, 7
-;MyProject.c,93 :: 		intcon.inte = 1; //activer interruption sur rp0
+;MyProject.c,94 :: 		intcon.inte = 1; //activer interruption sur rp0
 	BSF        INTCON+0, 4
-;MyProject.c,94 :: 		intcon.rbie = 1; //acriver interruption sur le portb
+;MyProject.c,95 :: 		intcon.rbie = 1; //acriver interruption sur le portb
 	BSF        INTCON+0, 3
-;MyProject.c,95 :: 		intcon.T0IE = 1; // activer le timer
+;MyProject.c,96 :: 		intcon.T0IE = 1; // activer le timer
 	BSF        INTCON+0, 5
-;MyProject.c,96 :: 		TMR0 = 0; //initialiser timer
+;MyProject.c,97 :: 		TMR0 = 0; //initialiser timer
 	CLRF       TMR0+0
-;MyProject.c,97 :: 		option_reg = 0b00000111;
+;MyProject.c,98 :: 		option_reg = 0b00000111;
 	MOVLW      7
 	MOVWF      OPTION_REG+0
-;MyProject.c,98 :: 		NB = 31; //initialiser le NB
+;MyProject.c,99 :: 		NB = 31; //initialiser le NB
 	MOVLW      31
 	MOVWF      _NB+0
 	MOVLW      0
 	MOVWF      _NB+1
-;MyProject.c,99 :: 		option_reg.intedg = 1; //activer l'interruption sur front montant
+;MyProject.c,100 :: 		option_reg.intedg = 1; //activer l'interruption sur front montant
 	BSF        OPTION_REG+0, 6
-;MyProject.c,101 :: 		trisb = 0b00111001;
+;MyProject.c,102 :: 		trisb = 0b00111001;
 	MOVLW      57
 	MOVWF      TRISB+0
-;MyProject.c,102 :: 		trisc = 0b00000000;
+;MyProject.c,103 :: 		trisc = 0b00000000;
 	CLRF       TRISC+0
-;MyProject.c,103 :: 		trisc = 0;
+;MyProject.c,104 :: 		trisc = 0;
 	CLRF       TRISC+0
-;MyProject.c,105 :: 		portb.rb1 = 0;
+;MyProject.c,106 :: 		portb.rb1 = 0;
 	BCF        PORTB+0, 1
-;MyProject.c,106 :: 		portb.rb2 = 0;
+;MyProject.c,107 :: 		portb.rb2 = 0;
 	BCF        PORTB+0, 2
-;MyProject.c,107 :: 		portb.rb6 = 0;
+;MyProject.c,108 :: 		portb.rb6 = 0;
 	BCF        PORTB+0, 6
-;MyProject.c,108 :: 		portb.rb7 = 0;
+;MyProject.c,109 :: 		portb.rb7 = 0;
 	BCF        PORTB+0, 7
-;MyProject.c,109 :: 		portc = 0;
+;MyProject.c,110 :: 		portc = 0;
 	CLRF       PORTC+0
-;MyProject.c,110 :: 		Lcd_Cmd(_LCD_CLEAR);
+;MyProject.c,111 :: 		Lcd_Cmd(_LCD_CLEAR);
 	MOVLW      1
 	MOVWF      FARG_Lcd_Cmd_out_char+0
 	CALL       _Lcd_Cmd+0
-;MyProject.c,111 :: 		delay_ms(100);
+;MyProject.c,112 :: 		delay_ms(100);
 	MOVLW      130
 	MOVWF      R12+0
 	MOVLW      221
@@ -319,7 +319,7 @@ L_main17:
 	GOTO       L_main17
 	NOP
 	NOP
-;MyProject.c,112 :: 		Lcd_Out(1, 1, txt1);
+;MyProject.c,113 :: 		Lcd_Out(1, 1, txt1);
 	MOVLW      1
 	MOVWF      FARG_Lcd_Out_row+0
 	MOVLW      1
@@ -327,7 +327,7 @@ L_main17:
 	MOVLW      _txt1+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;MyProject.c,113 :: 		delay_ms(100); // Write text in first row
+;MyProject.c,114 :: 		delay_ms(100); // Write text in first row
 	MOVLW      130
 	MOVWF      R12+0
 	MOVLW      221
@@ -339,7 +339,7 @@ L_main18:
 	GOTO       L_main18
 	NOP
 	NOP
-;MyProject.c,114 :: 		Lcd_Out(2, 1, txt3); // Write text in second row
+;MyProject.c,115 :: 		Lcd_Out(2, 1, txt3); // Write text in second row
 	MOVLW      2
 	MOVWF      FARG_Lcd_Out_row+0
 	MOVLW      1
@@ -347,7 +347,7 @@ L_main18:
 	MOVLW      _txt3+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;MyProject.c,115 :: 		delay_ms(300);
+;MyProject.c,116 :: 		delay_ms(300);
 	MOVLW      2
 	MOVWF      R11+0
 	MOVLW      134
@@ -361,14 +361,14 @@ L_main19:
 	GOTO       L_main19
 	DECFSZ     R11+0, 1
 	GOTO       L_main19
-;MyProject.c,116 :: 		for (j = 0; j < 32; j++) {
+;MyProject.c,117 :: 		for (j = 0; j < 32; j++) {
 	CLRF       _j+0
 L_main20:
 	MOVLW      32
 	SUBWF      _j+0, 0
 	BTFSC      STATUS+0, 0
 	GOTO       L_main21
-;MyProject.c,117 :: 		EEPROM_Write(0x10 + j, MD[j]);
+;MyProject.c,118 :: 		EEPROM_Write(0x10 + j, MD[j]);
 	MOVF       _j+0, 0
 	ADDLW      16
 	MOVWF      FARG_EEPROM_Write_Address+0
@@ -378,7 +378,7 @@ L_main20:
 	MOVF       INDF+0, 0
 	MOVWF      FARG_EEPROM_Write_data_+0
 	CALL       _EEPROM_Write+0
-;MyProject.c,118 :: 		delay_ms(20);
+;MyProject.c,119 :: 		delay_ms(20);
 	MOVLW      26
 	MOVWF      R12+0
 	MOVLW      248
@@ -389,19 +389,19 @@ L_main23:
 	DECFSZ     R12+0, 1
 	GOTO       L_main23
 	NOP
-;MyProject.c,116 :: 		for (j = 0; j < 32; j++) {
+;MyProject.c,117 :: 		for (j = 0; j < 32; j++) {
 	INCF       _j+0, 1
-;MyProject.c,119 :: 		}
+;MyProject.c,120 :: 		}
 	GOTO       L_main20
 L_main21:
-;MyProject.c,120 :: 		for (j = 0; j < 16; j++) {
+;MyProject.c,121 :: 		for (j = 0; j < 16; j++) {
 	CLRF       _j+0
 L_main24:
 	MOVLW      16
 	SUBWF      _j+0, 0
 	BTFSC      STATUS+0, 0
 	GOTO       L_main25
-;MyProject.c,121 :: 		array[j] = EEPROM_Read(0x10 + j);
+;MyProject.c,122 :: 		array[j] = EEPROM_Read(0x10 + j);
 	MOVF       _j+0, 0
 	ADDLW      _array+0
 	MOVWF      FLOC__main+0
@@ -413,7 +413,7 @@ L_main24:
 	MOVWF      FSR
 	MOVF       R0+0, 0
 	MOVWF      INDF+0
-;MyProject.c,122 :: 		delay_ms(20);
+;MyProject.c,123 :: 		delay_ms(20);
 	MOVLW      26
 	MOVWF      R12+0
 	MOVLW      248
@@ -424,23 +424,23 @@ L_main27:
 	DECFSZ     R12+0, 1
 	GOTO       L_main27
 	NOP
-;MyProject.c,120 :: 		for (j = 0; j < 16; j++) {
+;MyProject.c,121 :: 		for (j = 0; j < 16; j++) {
 	INCF       _j+0, 1
-;MyProject.c,123 :: 		}
+;MyProject.c,124 :: 		}
 	GOTO       L_main24
 L_main25:
-;MyProject.c,124 :: 		for (j = 0; j < 16; j++) {
-	CLRF       _j+0
+;MyProject.c,125 :: 		for (b = 0; b < 16; b++) {
+	CLRF       _b+0
 L_main28:
 	MOVLW      16
-	SUBWF      _j+0, 0
+	SUBWF      _b+0, 0
 	BTFSC      STATUS+0, 0
 	GOTO       L_main29
-;MyProject.c,125 :: 		array2[j] = EEPROM_Read(0x20 + j);
-	MOVF       _j+0, 0
+;MyProject.c,126 :: 		array2[b] = EEPROM_Read(0x20 + b);
+	MOVF       _b+0, 0
 	ADDLW      _array2+0
 	MOVWF      FLOC__main+0
-	MOVF       _j+0, 0
+	MOVF       _b+0, 0
 	ADDLW      32
 	MOVWF      FARG_EEPROM_Read_Address+0
 	CALL       _EEPROM_Read+0
@@ -448,7 +448,7 @@ L_main28:
 	MOVWF      FSR
 	MOVF       R0+0, 0
 	MOVWF      INDF+0
-;MyProject.c,126 :: 		delay_ms(20);
+;MyProject.c,127 :: 		delay_ms(20);
 	MOVLW      26
 	MOVWF      R12+0
 	MOVLW      248
@@ -459,25 +459,25 @@ L_main31:
 	DECFSZ     R12+0, 1
 	GOTO       L_main31
 	NOP
-;MyProject.c,124 :: 		for (j = 0; j < 16; j++) {
-	INCF       _j+0, 1
-;MyProject.c,127 :: 		}
+;MyProject.c,125 :: 		for (b = 0; b < 16; b++) {
+	INCF       _b+0, 1
+;MyProject.c,128 :: 		}
 	GOTO       L_main28
 L_main29:
-;MyProject.c,128 :: 		while (1) {
+;MyProject.c,129 :: 		while (1) {
 L_main32:
-;MyProject.c,129 :: 		if (flagT == 1) {
+;MyProject.c,130 :: 		if (flagT == 1) {
 	MOVF       _flagT+0, 0
 	XORLW      1
 	BTFSS      STATUS+0, 2
 	GOTO       L_main34
-;MyProject.c,130 :: 		Lcd_Cmd(_LCD_CLEAR);
+;MyProject.c,131 :: 		Lcd_Cmd(_LCD_CLEAR);
 	MOVLW      1
 	MOVWF      FARG_Lcd_Cmd_out_char+0
 	CALL       _Lcd_Cmd+0
-;MyProject.c,131 :: 		afficherMD(); // afficher les médicaments
+;MyProject.c,132 :: 		afficherMD(); // afficher les m?dicaments
 	CALL       _afficherMD+0
-;MyProject.c,132 :: 		delay_ms(600);
+;MyProject.c,133 :: 		delay_ms(600);
 	MOVLW      4
 	MOVWF      R11+0
 	MOVLW      12
@@ -493,7 +493,7 @@ L_main35:
 	GOTO       L_main35
 	NOP
 	NOP
-;MyProject.c,133 :: 		Temp = ADC_Read(0) * 0.489; // Read analog voltage and convert it to degree Celsius (0.489 = 500/1023)
+;MyProject.c,134 :: 		Temp = ADC_Read(0) * 0.489; // Read analog voltage and convert it to degree Celsius (0.489 = 500/1023)
 	CLRF       FARG_ADC_Read_channel+0
 	CALL       _ADC_Read+0
 	CALL       _word2double+0
@@ -511,20 +511,20 @@ L_main35:
 	MOVWF      _Temp+0
 	MOVF       R0+1, 0
 	MOVWF      _Temp+1
-;MyProject.c,134 :: 		portc.rc0 = 0; // déallumer speaker
+;MyProject.c,135 :: 		portc.rc0 = 0; // d?allumer speaker
 	BCF        PORTC+0, 0
-;MyProject.c,135 :: 		Lcd_Cmd(_LCD_CLEAR); // Clear display
+;MyProject.c,136 :: 		Lcd_Cmd(_LCD_CLEAR); // Clear display
 	MOVLW      1
 	MOVWF      FARG_Lcd_Cmd_out_char+0
 	CALL       _Lcd_Cmd+0
-;MyProject.c,136 :: 		flagT = 0;
+;MyProject.c,137 :: 		flagT = 0;
 	CLRF       _flagT+0
-;MyProject.c,137 :: 		resume = 1;
+;MyProject.c,138 :: 		resume = 1;
 	MOVLW      1
 	MOVWF      _resume+0
-;MyProject.c,138 :: 		}
+;MyProject.c,139 :: 		}
 L_main34:
-;MyProject.c,139 :: 		if (temp > 99)
+;MyProject.c,140 :: 		if (temp > 99)
 	MOVF       _Temp+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
@@ -534,16 +534,16 @@ L_main34:
 L__main61:
 	BTFSC      STATUS+0, 0
 	GOTO       L_main36
-;MyProject.c,140 :: 		Temperature[0] = 1 + 48; // Put 1 (of hundred)
+;MyProject.c,141 :: 		Temperature[0] = 1 + 48; // Put 1 (of hundred)
 	MOVLW      49
 	MOVWF      _Temperature+0
 	GOTO       L_main37
 L_main36:
-;MyProject.c,142 :: 		Temperature[0] = ' '; // Put space
+;MyProject.c,143 :: 		Temperature[0] = ' '; // Put space
 	MOVLW      32
 	MOVWF      _Temperature+0
 L_main37:
-;MyProject.c,143 :: 		Temperature[1] = (temp / 10) % 10 + 48;
+;MyProject.c,144 :: 		Temperature[1] = (temp / 10) % 10 + 48;
 	MOVLW      10
 	MOVWF      R4+0
 	MOVLW      0
@@ -565,7 +565,7 @@ L_main37:
 	MOVLW      48
 	ADDWF      R0+0, 0
 	MOVWF      _Temperature+1
-;MyProject.c,144 :: 		Temperature[2] = temp % 10 + 48;
+;MyProject.c,145 :: 		Temperature[2] = temp % 10 + 48;
 	MOVLW      10
 	MOVWF      R4+0
 	MOVLW      0
@@ -582,14 +582,14 @@ L_main37:
 	MOVLW      48
 	ADDWF      R0+0, 0
 	MOVWF      _Temperature+2
-;MyProject.c,145 :: 		Temperature[5] = 223; // Put degree symbol ( ° )
+;MyProject.c,146 :: 		Temperature[5] = 223; // Put degree symbol ( ? )
 	MOVLW      223
 	MOVWF      _Temperature+5
-;MyProject.c,146 :: 		Lcd_Cmd(_LCD_CLEAR); // Clear display
+;MyProject.c,147 :: 		Lcd_Cmd(_LCD_CLEAR); // Clear display
 	MOVLW      1
 	MOVWF      FARG_Lcd_Cmd_out_char+0
 	CALL       _Lcd_Cmd+0
-;MyProject.c,147 :: 		lcd_out(1, 3, "Temperature:");
+;MyProject.c,148 :: 		lcd_out(1, 3, "Temperature:");
 	MOVLW      1
 	MOVWF      FARG_Lcd_Out_row+0
 	MOVLW      3
@@ -597,7 +597,7 @@ L_main37:
 	MOVLW      ?lstr1_MyProject+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;MyProject.c,148 :: 		delay_ms(20);
+;MyProject.c,149 :: 		delay_ms(20);
 	MOVLW      26
 	MOVWF      R12+0
 	MOVLW      248
@@ -608,7 +608,7 @@ L_main38:
 	DECFSZ     R12+0, 1
 	GOTO       L_main38
 	NOP
-;MyProject.c,149 :: 		lcd_out(2, 5, Temperature); // Display LM35 temperature result
+;MyProject.c,150 :: 		lcd_out(2, 5, Temperature); // Display LM35 temperature result
 	MOVLW      2
 	MOVWF      FARG_Lcd_Out_row+0
 	MOVLW      5
@@ -616,7 +616,7 @@ L_main38:
 	MOVLW      _Temperature+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;MyProject.c,150 :: 		Delay_ms(600);
+;MyProject.c,151 :: 		Delay_ms(600);
 	MOVLW      4
 	MOVWF      R11+0
 	MOVLW      12
@@ -632,7 +632,7 @@ L_main39:
 	GOTO       L_main39
 	NOP
 	NOP
-;MyProject.c,151 :: 		if (Temp < 1) {
+;MyProject.c,152 :: 		if (Temp < 1) {
 	MOVLW      0
 	SUBWF      _Temp+1, 0
 	BTFSS      STATUS+0, 2
@@ -642,16 +642,16 @@ L_main39:
 L__main62:
 	BTFSC      STATUS+0, 0
 	GOTO       L_main40
-;MyProject.c,152 :: 		for (i = 0; i < 3; i++) {
+;MyProject.c,153 :: 		for (i = 0; i < 3; i++) {
 	CLRF       _i+0
 L_main41:
 	MOVLW      3
 	SUBWF      _i+0, 0
 	BTFSC      STATUS+0, 0
 	GOTO       L_main42
-;MyProject.c,153 :: 		portc.rc3 = 1;
+;MyProject.c,154 :: 		portc.rc3 = 1;
 	BSF        PORTC+0, 3
-;MyProject.c,154 :: 		delay_ms(250);
+;MyProject.c,155 :: 		delay_ms(250);
 	MOVLW      2
 	MOVWF      R11+0
 	MOVLW      69
@@ -667,9 +667,9 @@ L_main44:
 	GOTO       L_main44
 	NOP
 	NOP
-;MyProject.c,155 :: 		portc.rc3 = 0;
+;MyProject.c,156 :: 		portc.rc3 = 0;
 	BCF        PORTC+0, 3
-;MyProject.c,156 :: 		delay_ms(250);
+;MyProject.c,157 :: 		delay_ms(250);
 	MOVLW      2
 	MOVWF      R11+0
 	MOVLW      69
@@ -685,19 +685,19 @@ L_main45:
 	GOTO       L_main45
 	NOP
 	NOP
-;MyProject.c,152 :: 		for (i = 0; i < 3; i++) {
+;MyProject.c,153 :: 		for (i = 0; i < 3; i++) {
 	INCF       _i+0, 1
-;MyProject.c,157 :: 		}
+;MyProject.c,158 :: 		}
 	GOTO       L_main41
 L_main42:
-;MyProject.c,158 :: 		}
+;MyProject.c,159 :: 		}
 L_main40:
-;MyProject.c,159 :: 		if (resume == 1) {
+;MyProject.c,160 :: 		if (resume == 1) {
 	MOVF       _resume+0, 0
 	XORLW      1
 	BTFSS      STATUS+0, 2
 	GOTO       L_main46
-;MyProject.c,160 :: 		if (Temp > 39) {
+;MyProject.c,161 :: 		if (Temp > 39) {
 	MOVF       _Temp+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
@@ -707,9 +707,9 @@ L_main40:
 L__main63:
 	BTFSC      STATUS+0, 0
 	GOTO       L_main47
-;MyProject.c,161 :: 		portc.rc1 = 1;
+;MyProject.c,162 :: 		portc.rc1 = 1;
 	BSF        PORTC+0, 1
-;MyProject.c,162 :: 		delay_ms(500);
+;MyProject.c,163 :: 		delay_ms(500);
 	MOVLW      3
 	MOVWF      R11+0
 	MOVLW      138
@@ -725,11 +725,11 @@ L_main48:
 	GOTO       L_main48
 	NOP
 	NOP
-;MyProject.c,163 :: 		portc.rc1 = 0;
+;MyProject.c,164 :: 		portc.rc1 = 0;
 	BCF        PORTC+0, 1
-;MyProject.c,164 :: 		resume = 0;
+;MyProject.c,165 :: 		resume = 0;
 	CLRF       _resume+0
-;MyProject.c,165 :: 		} else if ((Temp <= 39) && (Temp > 1)) {
+;MyProject.c,166 :: 		} else if ((Temp <= 39) && (Temp > 1)) {
 	GOTO       L_main49
 L_main47:
 	MOVF       _Temp+1, 0
@@ -751,9 +751,9 @@ L__main65:
 	BTFSC      STATUS+0, 0
 	GOTO       L_main52
 L__main54:
-;MyProject.c,166 :: 		portc.rc2 = 1;
+;MyProject.c,167 :: 		portc.rc2 = 1;
 	BSF        PORTC+0, 2
-;MyProject.c,167 :: 		delay_ms(400);
+;MyProject.c,168 :: 		delay_ms(400);
 	MOVLW      3
 	MOVWF      R11+0
 	MOVLW      8
@@ -767,18 +767,18 @@ L_main53:
 	GOTO       L_main53
 	DECFSZ     R11+0, 1
 	GOTO       L_main53
-;MyProject.c,168 :: 		portc.rc2 = 0;
+;MyProject.c,169 :: 		portc.rc2 = 0;
 	BCF        PORTC+0, 2
-;MyProject.c,169 :: 		resume = 0;
+;MyProject.c,170 :: 		resume = 0;
 	CLRF       _resume+0
-;MyProject.c,170 :: 		}
+;MyProject.c,171 :: 		}
 L_main52:
 L_main49:
-;MyProject.c,171 :: 		}
-L_main46:
 ;MyProject.c,172 :: 		}
-	GOTO       L_main32
+L_main46:
 ;MyProject.c,173 :: 		}
+	GOTO       L_main32
+;MyProject.c,174 :: 		}
 L_end_main:
 	GOTO       $+0
 ; end of _main

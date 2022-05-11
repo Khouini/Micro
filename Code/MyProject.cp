@@ -22,6 +22,7 @@ char array[] = "";
 char array2[] = "";
 char MD[] = "Ebixa 10mg 2/J  Aricept 10mg 3/J";
 char i;
+char b;
 int NB;
 char txt1[] = "Worked          ";
 char Temperature[] = " 00.0 C";
@@ -48,9 +49,8 @@ void interrupt() {
  if (intcon.INTF) {
  porta.ra1 = 0;
  clignoter();
- }
  intcon.INTF = 0;
-
+ }
  if (intcon.rbif) {
  if (portb.rb5 == 1) {
  portb.rb6 = 1;
@@ -70,9 +70,9 @@ void interrupt() {
  portb.rb7 = 0;
  delay_ms(100);
  }
-
- }
  intcon.rbif = 0;
+ }
+
  if (intcon.T0IF) {
  NB--;
  if (NB == 0) {
@@ -82,6 +82,7 @@ void interrupt() {
  }
  }
  intcon.T0IF = 0;
+
 }
 void main() {
  Degree[0] = 223;
@@ -122,8 +123,8 @@ void main() {
  array[j] = EEPROM_Read(0x10 + j);
  delay_ms(20);
  }
- for (j = 0; j < 16; j++) {
- array2[j] = EEPROM_Read(0x20 + j);
+ for (b = 0; b < 16; b++) {
+ array2[b] = EEPROM_Read(0x20 + b);
  delay_ms(20);
  }
  while (1) {

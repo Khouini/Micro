@@ -21,6 +21,7 @@ char array[] = "";
 char array2[] = "";
 char MD[] = "Ebixa 10mg 2/J  Aricept 10mg 3/J";
 char i;
+char b;
 int NB;
 char txt1[] = "Worked          ";
 char Temperature[] = " 00.0 C";
@@ -47,9 +48,8 @@ void interrupt() {
   if (intcon.INTF) {
     porta.ra1 = 0;
     clignoter();
+    intcon.INTF = 0; //flag=0
   }
-  intcon.INTF = 0; //flag=0
-
   if (intcon.rbif) {
     if (portb.rb5 == 1) {
       portb.rb6 = 1;
@@ -69,18 +69,19 @@ void interrupt() {
       portb.rb7 = 0;
       delay_ms(100);
     }
-    //flag=0
+    intcon.rbif = 0; //flag=0
   }
-  intcon.rbif = 0; //flag=0
+
   if (intcon.T0IF) {
     NB--;
-    if (NB == 0) { // le temps (8s) est passé
+    if (NB == 0) { // le temps (8s) est pass?
       flagT = 1;
       NB = 31; // Initialsier NB
       TMR0 = 0; // Initialiser timer
     }
   }
   intcon.T0IF = 0; // flag = 0
+
 }
 void main() {
   Degree[0] = 223;
@@ -121,17 +122,17 @@ void main() {
     array[j] = EEPROM_Read(0x10 + j);
     delay_ms(20);
   }
-  for (j = 0; j < 16; j++) {
-    array2[j] = EEPROM_Read(0x20 + j);
+  for (b = 0; b < 16; b++) {
+    array2[b] = EEPROM_Read(0x20 + b);
     delay_ms(20);
   }
   while (1) {
     if (flagT == 1) {
       Lcd_Cmd(_LCD_CLEAR);
-      afficherMD(); // afficher les médicaments
+      afficherMD(); // afficher les m?dicaments
       delay_ms(600);
       Temp = ADC_Read(0) * 0.489; // Read analog voltage and convert it to degree Celsius (0.489 = 500/1023)
-      portc.rc0 = 0; // déallumer speaker
+      portc.rc0 = 0; // d?allumer speaker
       Lcd_Cmd(_LCD_CLEAR); // Clear display
       flagT = 0;
       resume = 1;
@@ -142,7 +143,7 @@ void main() {
       Temperature[0] = ' '; // Put space
     Temperature[1] = (temp / 10) % 10 + 48;
     Temperature[2] = temp % 10 + 48;
-    Temperature[5] = 223; // Put degree symbol ( ° )
+    Temperature[5] = 223; // Put degree symbol ( ? )
     Lcd_Cmd(_LCD_CLEAR); // Clear display
     lcd_out(1, 3, "Temperature:");
     delay_ms(20);
