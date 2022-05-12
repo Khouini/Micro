@@ -24,11 +24,11 @@ char MD[] = "Ebixa 10mg 2/J  Aricept 10mg 3/J";
 char i;
 char b;
 int NB;
-char txt1[] = "Worked          ";
+char txt1[] = "Nom Patient     ";
 char Temperature[] = " 00.0 C";
 char degree[] = " ";
 unsigned int Temp;
-char txt3[] = "successfully    ";
+char txt3[] = "Have a good time";
 int t;
 void clignoter() {
  for (i = 0; i < 2; i++) {
