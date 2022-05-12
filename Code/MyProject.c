@@ -101,7 +101,7 @@ void main() {
   //Configuraton des E/S
   trisb = 0b00111001;
   trisc = 0b00000000;
-  trisc = 0;
+  trisa = 1;
   //Initialisation
   portb.rb1 = 0;
   portb.rb2 = 0;
@@ -131,7 +131,7 @@ void main() {
       Lcd_Cmd(_LCD_CLEAR);
       afficherMD(); // afficher les m?dicaments
       delay_ms(600);
-      Temp = ADC_Read(0) * 0.489; // Read analog voltage and convert it to degree Celsius (0.489 = 500/1023)
+      Temp = ADC_Read(3) * 0.489; // Read analog voltage and convert it to degree Celsius (0.489 = 500/1023)
       portc.rc0 = 0; // d?allumer speaker
       Lcd_Cmd(_LCD_CLEAR); // Clear display
       flagT = 0;
